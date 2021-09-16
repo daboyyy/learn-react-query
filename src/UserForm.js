@@ -11,7 +11,7 @@ const UserForm = ({ user, setIsEditing }) => {
 
     const { isLoading, mutate } = useMutation(api.updateUser, {
         onSuccess: (data) => {
-            queryClient.setQueryData(['user'], user.id), data);
+            queryClient.setQueryData((['user'], user.id), data);
             setIsEditing(false);
         }
     });
