@@ -20,8 +20,8 @@ const UserForm = ({ user, setIsEditing }) => {
     });
 
     const handleChange = (event) => {
-        const [name, value] = event.target;
-        setFields({ ...fields, [name]: value })
+        //const [name, value] = event.target;
+        setFields({ ...fields, [event.target.name]: event.target.value })
     }
 
     const handleSubmit = (event) => {
@@ -58,6 +58,7 @@ const UserForm = ({ user, setIsEditing }) => {
                     style={{ width: '100%', height: 100 }}
                 />
             </label>
+            <input type="submit" value="Submit" />
             </form>
         </div>
      );
