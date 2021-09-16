@@ -1,8 +1,23 @@
 import React, { useState } from "react";
-//import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
-const UserForm = ({ user }) => {
+//api
+import * as api from './userApi';
+
+const UserForm = ({ user, setIsEditing }) => {
     const [fields, setFields] = useState({ ...user });
+
+    const queryClient = useQueryClient();
+
+    const { isLoading, mutate } = useMutation(api.updateUser, {
+        onSuccess: () => {
+
+            // trigger the old data to be updated
+            queryClient.invalidateQueries(['user', user.id]);
+
+            setIsEditing(false);
+        }
+    });
 
     const handleChange = (event) => {
         const [name, value] = event.target;
@@ -12,7 +27,11 @@ const UserForm = ({ user }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        console.log(fields)
+        mutate(fields);
+    }
+
+    if(isLoading){
+        return ' Saving your changes...';
     }
 
     return (
