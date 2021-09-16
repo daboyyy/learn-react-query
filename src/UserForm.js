@@ -10,18 +10,20 @@ const UserForm = ({ user, setIsEditing }) => {
     const queryClient = useQueryClient();
 
     const { isLoading, mutate } = useMutation(api.updateUser, {
-        onSuccess: () => {
-
-            // trigger the old data to be updated
-            queryClient.invalidateQueries(['user', user.id]);
+        onMutate: (updatedUser) => {
+            queryClient.setQueryData(['user'], user.id), updatedUser);
 
             setIsEditing(false);
+        },
+        onSuccess: () => {
+            // trigger the old data to be updated
+            queryClient.invalidateQueries(['user', user.id]);
         }
     });
 
     const handleChange = (event) => {
-        //const [name, value] = event.target;
-        setFields({ ...fields, [event.target.name]: event.target.value })
+        const { name, value } = event.target;
+        setFields({ ...fields, [name]: value })
     }
 
     const handleSubmit = (event) => {
